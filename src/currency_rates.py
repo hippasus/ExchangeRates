@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-
 
-import json, re, urllib2
+import json, re, urllib2, utils
 import webapp2
 
 class GoogleCurrencyRateRequest():
@@ -34,22 +34,9 @@ class CurrencyRates(webapp2.RequestHandler):
         def get_request_params():
             return (request.get('from'), request.get('to'), request.get('q'), request.get('callback'))
 
-        def write_output(out_result, jsonp_callback):
-            output, content_type = json.dumps(out_result), "application/json"
-            
-            if (jsonp_callback):
-                output = jsonp_callback + "(" + output + ")"
-                content_type = 'application/x-javascript'
-
-            response.headers['Content-Type'] = content_type
-            response.out.write(output)
-
         from_currency, to_currency, qty, callback = get_request_params()
 
-        if (from_currency is not None and
-            to_currency is not None and
-            len(from_currency) > 0 and
-            len(to_currency) > 0):
+        if not utils.is_none_or_empty(from_currency) and not utils.is_none_or_empty(to_currency):
             req = GoogleCurrencyRateRequest()
 
             rate = req.get_rate(from_currency, to_currency)
@@ -67,4 +54,4 @@ class CurrencyRates(webapp2.RequestHandler):
         else:
             result = {"err": "invalid request"}
 
-        write_output(result, callback)
+        utils.write_jsonp_output(response, result, callback)

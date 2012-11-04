@@ -10,7 +10,7 @@ Usage
 
 ### Currency API
 
-By invoking the currency API, just send a request to `/currency` with following parameters:
+By invoking the currency API, just send a request to `/currency` as follow:
 
     /currency?from=USD&to=EUR&q=1&callback=jsonpCallback
 
@@ -33,4 +33,14 @@ Here are some samples:
         <tr><td><code>/currency?from=USD</code></td><td><code>{"err": "invalid request"}</code></td></tr>
     </tbody>
 </table>
+
+### Temperature API
+
+By invoking the temperature API, send a request to `/temperature` as follows:
+
+    /temperature?mode=C2F&q=37
+
+The mode can be `C2F`(Celsius to Fahrenheit) or `F2C`(Fahrenheit to Celsius). A jsonp `callback` parameter is optional. The response is as:
+
+    {"v": 98.6, "mode": "C2F", "qty": 37.0}
 
