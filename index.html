@@ -1,35 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>ExchangeRates by hyacinth</title>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="ExchangeRates : Exchange rate JSON/JSONP APIs" />
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>ExchangeRates</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1 class="header">ExchangeRates</h1>
-        <p class="header">Exchange rate JSON/JSONP APIs</p>
 
-        <ul>
-          <li class="download"><a class="buttons" href="https://github.com/hyacinth/ExchangeRates/zipball/master">Download ZIP</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/hyacinth/ExchangeRates/tarball/master">Download TAR</a></li>
-          <li><a class="buttons github" href="https://github.com/hyacinth/ExchangeRates">View On GitHub</a></li>
-        </ul>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/hyacinth/ExchangeRates">View on GitHub</a>
 
-        <p class="header">This project is maintained by <a class="header name" href="https://github.com/hyacinth">hyacinth</a></p>
+          <h1 id="project_title">ExchangeRates</h1>
+          <h2 id="project_tagline">Exchange rate JSON/JSONP APIs</h2>
 
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/hyacinth/ExchangeRates/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/hyacinth/ExchangeRates/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
 
-      </header>
-      <section>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <h1>Rate Exchange JSON/JSONP APIs</h1>
 
 <p>This is the rate exchange JSON/JSONP APIs project which is deployed at <a href="http://rate-exchange.appspot.com/">http://rate-exchange.appspot.com/</a>.</p>
@@ -40,7 +41,7 @@
 
 <h3>Currency API</h3>
 
-<p>By invoking the currency API, just send a request to <code>/currency</code> with following parameters:</p>
+<p>By invoking the currency API, just send a request to <code>/currency</code> as follow:</p>
 
 <pre><code>/currency?from=USD&amp;to=EUR&amp;q=1&amp;callback=jsonpCallback
 </code></pre>
@@ -74,13 +75,29 @@
 <td><code>/currency?from=USD</code></td>
 <td><code>{"err": "invalid request"}</code></td>
 </tr>
-</table>
+</table><h3>Temperature API</h3>
+
+<p>By invoking the temperature API, send a request to <code>/temperature</code> as follows:</p>
+
+<pre><code>/temperature?mode=C2F&amp;q=37
+</code></pre>
+
+<p>The mode can be <code>C2F</code>(Celsius to Fahrenheit) or <code>F2C</code>(Fahrenheit to Celsius). A jsonp <code>callback</code> parameter is optional. The response is as:</p>
+
+<pre><code>{"v": 98.6, "mode": "C2F", "qty": 37.0}
+</code></pre>
       </section>
-      <footer>
-        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">ExchangeRates maintained by <a href="https://github.com/hyacinth">hyacinth</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		
+
+    
+
   </body>
 </html>
