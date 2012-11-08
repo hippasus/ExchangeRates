@@ -17,7 +17,7 @@ def write_jsonp_output(response, dic, jsonp_callback):
     if is_none_or_empty(jsonp_callback):
         write_json_output(response, dic)
     else:
-        response_text, content_type = jsonp_callback + "(" + json.dumps(dic) + ")", "application/x-javascript"
+        response_text, content_type = jsonp_callback + "(" + json.dumps(dic) + ")", "application/javascript"
         _do_write(response, response_text, content_type)
 
 def _do_write(response, response_text, content_type):
