@@ -36,3 +36,7 @@ The mode can be `C2F`(Celsius to Fahrenheit) or `F2C`(Fahrenheit to Celsius). A 
 
     {"v": 98.6, "mode": "C2F", "qty": 37.0}
 
+### Help needed!
+
+We've reached the GAE incoming & outgoing bandwidth limit [Safety Quotas](https://developers.google.com/appengine/docs/quotas#Safety_Quotas).
+And I need your help to enable billing to get larger quotas. Do please help to click [this link](http://ko-fi.com?i=8d071856392d304) and donate me $1.00USD.
