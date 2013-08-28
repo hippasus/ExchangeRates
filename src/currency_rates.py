@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import json, re, urllib2, utils
+import json, re, urllib2, utils, logging
 import webapp2
+from google.appengine.api import memcache
 
 NOT_SUPPORTED_RATE = -1
 
@@ -32,24 +33,37 @@ class GoogleCurrencyRateRequest():
 
         return rate
 
-
 class CurrencyRates(webapp2.RequestHandler):
     def get(self):
         request, response = self.request, self.response
-        
+
         def get_request_params():
             return (request.get('from'), request.get('to'), request.get('q'), request.get('callback'))
+
+        def get_rate(from_currency, to_currency):
+            cache_key = '{0}-{1}'.format(from_currency, to_currency)
+            rate = memcache.get(cache_key)
+            if rate is None:
+                req = GoogleCurrencyRateRequest()
+                rate = req.get_rate(from_currency, to_currency)
+
+                logging.debug('rate fetched, key is {0}'.format(cache_key))
+
+                if rate is not None and memcache.add(cache_key, rate, 1800):
+                    logging.debug('rate cached, key is {0}'.format(cache_key))
+            else:
+                logging.debug('rate fetched form cache, key is {0}'.format(cache_key))
+
+            return rate
 
         from_currency, to_currency, qty, callback = get_request_params()
 
         if not utils.is_none_or_empty(from_currency) and not utils.is_none_or_empty(to_currency):
-            req = GoogleCurrencyRateRequest()
+            rate = get_rate(from_currency, to_currency)
 
-            rate = req.get_rate(from_currency, to_currency)
-
-            if (rate is None):
+            if rate is None:
                 result = {"err": 'error occurred'}
-            elif (rate == NOT_SUPPORTED_RATE):
+            elif rate == NOT_SUPPORTED_RATE:
                 result = {"err": 'not supported rate conversion.'}
             else:
                 result = {"from": from_currency, "to": to_currency, "rate": rate }
