@@ -1,8 +1,10 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import json, re, urllib2, utils
 import webapp2
+
+NOT_SUPPORTED_RATE = -1
 
 class GoogleCurrencyRateRequest():
     def get_rate(self, from_currency, to_currency):
@@ -10,19 +12,23 @@ class GoogleCurrencyRateRequest():
         url = 'https://www.google.com/ig/calculator?hl=en&q={0}{1}=?{2}'.format(1, from_currency, to_currency)
         opener = urllib2.build_opener()
         urllib2.install_opener(opener)
-        
-        response_str = urllib2.urlopen(url).read() # {lhs: "1 U.S. dollar",rhs: "7.75019569 Hong Kong dollars",error: "",icc: true}
+
+        response_str = unicode(urllib2.urlopen(url).read(), errors='ignore') # {lhs: "1 U.S. dollar",rhs: "7.75019569 Hong Kong dollars",error: "",icc: true}
         response_str = response_str.replace('lhs:', '"lhs":')
         response_str = response_str.replace('rhs:', '"rhs":')
         response_str = response_str.replace('error:', '"error":')
         response_str = response_str.replace('icc:', '"icc":')
         converted = json.loads(response_str)
 
-        pattern = re.compile('(\d+\.\d+) ')
+        pattern = re.compile('([\d ]+\.\d+) ')
         if (converted['error'] == ''):
             m = pattern.match(converted['rhs'])
             if (m is not None):
-                rate = float(m.group(0))
+                rate = float(re.sub(r' ', '', m.group(0)))
+            else:
+                rate = NOT_SUPPORTED_RATE
+        elif (converted['error'] == '4'):
+            rate = NOT_SUPPORTED_RATE
 
         return rate
 
@@ -43,6 +49,8 @@ class CurrencyRates(webapp2.RequestHandler):
 
             if (rate is None):
                 result = {"err": 'error occurred'}
+            elif (rate == NOT_SUPPORTED_RATE):
+                result = {"err": 'not supported rate conversion.'}
             else:
                 result = {"from": from_currency, "to": to_currency, "rate": rate }
 

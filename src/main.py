@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import webapp2, currency_rates, temperature
@@ -23,6 +23,9 @@ class Main(webapp2.RequestHandler):
             <li>Currency API: <a href="$host_url/currency?from=USD&to=EUR&q=1" target="_blank" rel="nofollow">$host_url/currency?from=USD&to=EUR&q=1</a></li>
             <li>Temperature API: <a href="$host_url/temperature?mode=C2F&q=37" target="_blank" rel="nofollow">$host_url/temperature?mode=C2F&q=37</a></li>
         </ul>
+        <div>
+            Got an error? Please help to create issue at <a href="https://github.com/hippasus/ExchangeRates/issues">https://github.com/hippasus/ExchangeRates/issues</a>.
+        </div>
         <p>--By Hippasus Chu</p>
     </body>
 </html>
