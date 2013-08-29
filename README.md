@@ -38,7 +38,9 @@ The mode can be `C2F`(Celsius to Fahrenheit) or `F2C`(Fahrenheit to Celsius). A 
 
     {"v": 98.6, "mode": "C2F", "qty": 37.0}
 
-### Help needed!
+
+Help needed!
+------------
 
 We've reached the [GAE URL Fetch Quota](https://developers.google.com/appengine/docs/quotas#UrlFetch) for the currency API.
 And I need your help to enable billing to get larger quota. Do please help to click [this link](http://ko-fi.com?i=8d071856392d304) and donate me $1.00USD.
