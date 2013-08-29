@@ -27,6 +27,7 @@ Here are some samples:
 | `/currency?from=USD&to=EUR&q=2&callback=jsonpCallback` | <code>jsonpCallback({<br />&nbsp;&nbsp;&nbsp;&nbsp;"to": "EUR",<br />&nbsp;&nbsp;&nbsp;&nbsp;"rate": 0.77966630299999995,<br />&nbsp;&nbsp;&nbsp;&nbsp;"from": "USD",<br />&nbsp;&nbsp;&nbsp;&nbsp;"v": 1.5593326059999999<br />})</code> |
 | `/currency?from=USD` | <code>{<br />&nbsp;&nbsp;&nbsp;&nbsp;"err": "invalid request"<br />}</code> |
 | `/currency?from=USD&to=LAK` | <code>{<br />&nbsp;&nbsp;&nbsp;&nbsp;"err": "not supported rate conversion."<br />}</code> |
+| `/currency?from=MXV&to=USD` | <code>{<br />&nbsp;&nbsp;&nbsp;&nbsp;"err": "Parse error in query. - tokens = 1 MXV =? U.S. dollar"<br />}</code> |
 
 ### Temperature API
 

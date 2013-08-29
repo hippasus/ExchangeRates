@@ -17,7 +17,7 @@ class GoogleCurrencyRateRequest():
         # for normal rate, google returns {lhs: "1 U.S. dollar",rhs: "21 276.5957 Vietnamese dong",error: "",icc: true}
         # for small rate, google returns {lhs: "1 Vietnamese dong",rhs: "4.7 \x26#215; 10\x3csup\x3e-5\x3c/sup\x3e U.S. dollars",error: "",icc: true}
         response_str = urllib2.urlopen(url).read().decode('utf-8', 'ignore')
-        response_str = response_str.replace('\\x26', '&').replace('\\x3c', '<').replace('\\x3e', '>')
+        response_str = response_str.replace('\\x26', '&').replace('\\x3c', '<').replace('\\x3e', '>').replace('\\x3d', '=')
 
         response_str = response_str.replace('lhs:', '"lhs":')
         response_str = response_str.replace('rhs:', '"rhs":')
@@ -27,7 +27,8 @@ class GoogleCurrencyRateRequest():
         converted = json.loads(response_str)
 
         pattern = re.compile('^(?P<rate>[\d ]+\.\d+)\s(?:&#215; 10<sup>(?P<exponential>-?[\d]+)</sup> )?')
-        if (converted['error'] == ''):
+        err = converted['error']
+        if (err == ''):
             m = pattern.match(converted['rhs'])
             if (m is not None):
                 rate = float(re.sub(r' ', '', m.group('rate')))
@@ -40,7 +41,7 @@ class GoogleCurrencyRateRequest():
         elif (converted['error'] == '4'):
             rate = NOT_SUPPORTED_RATE
 
-        return rate
+        return (rate, err)
 
 class CurrencyRates(webapp2.RequestHandler):
     def get(self):
@@ -54,7 +55,7 @@ class CurrencyRates(webapp2.RequestHandler):
             rate = memcache.get(cache_key)
             if rate is None:
                 req = GoogleCurrencyRateRequest()
-                rate = req.get_rate(from_currency, to_currency)
+                rate, err = req.get_rate(from_currency, to_currency)
 
                 logging.debug('rate fetched, key is {0}'.format(cache_key))
 
@@ -63,15 +64,15 @@ class CurrencyRates(webapp2.RequestHandler):
             else:
                 logging.debug('rate fetched form cache, key is {0}'.format(cache_key))
 
-            return rate
+            return rate, err
 
         from_currency, to_currency, qty, callback = get_request_params()
 
         if not utils.is_none_or_empty(from_currency) and not utils.is_none_or_empty(to_currency):
-            rate = get_rate(from_currency, to_currency)
+            rate, err = get_rate(from_currency, to_currency)
 
             if rate is None:
-                result = {"err": 'error occurred'}
+                result = {"err": err}
             elif rate == NOT_SUPPORTED_RATE:
                 result = {"err": 'not supported rate conversion.'}
             else:
