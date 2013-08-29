@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import webapp2, currency_rates, temperature
+import webapp2, currency_rates, temperature, logging
 
 class Main(webapp2.RequestHandler):
     def get(self):

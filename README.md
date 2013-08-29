@@ -15,6 +15,7 @@ By invoking the currency API, just send a request to `/currency` as follow:
     /currency?from=USD&to=EUR&q=1&callback=jsonpCallback
 
 And note that the parameter `q` and `callback` is optional.
+One more thing is that the rate fetched from google is cached by 30mins in this application.
 
 Here are some samples:
 
