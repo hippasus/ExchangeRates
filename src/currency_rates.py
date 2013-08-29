@@ -52,7 +52,7 @@ class CurrencyRates(webapp2.RequestHandler):
 
         def get_rate(from_currency, to_currency):
             cache_key = '{0}-{1}'.format(from_currency, to_currency)
-            rate = memcache.get(cache_key)
+            rate, err = memcache.get(cache_key), None
             if rate is None:
                 req = GoogleCurrencyRateRequest()
                 rate, err = req.get_rate(from_currency, to_currency)
