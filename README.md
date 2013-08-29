@@ -3,7 +3,7 @@ Rate Exchange JSON/JSONP APIs
 
 This is the rate exchange JSON/JSONP APIs project which is deployed at http://rate-exchange.appspot.com/.
 
-Currently only currency and temperature rate exchange is supported.
+Currently only currency and temperature rate exchange are supported.
 
 Usage
 ----
