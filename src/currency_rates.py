@@ -14,18 +14,27 @@ class GoogleCurrencyRateRequest():
         opener = urllib2.build_opener()
         urllib2.install_opener(opener)
 
-        response_str = unicode(urllib2.urlopen(url).read(), errors='ignore') # {lhs: "1 U.S. dollar",rhs: "7.75019569 Hong Kong dollars",error: "",icc: true}
+        # for normal rate, google returns {lhs: "1 U.S. dollar",rhs: "21 276.5957 Vietnamese dong",error: "",icc: true}
+        # for small rate, google returns {lhs: "1 Vietnamese dong",rhs: "4.7 \x26#215; 10\x3csup\x3e-5\x3c/sup\x3e U.S. dollars",error: "",icc: true}
+        response_str = urllib2.urlopen(url).read().decode('utf-8', 'ignore')
+        response_str = response_str.replace('\\x26', '&').replace('\\x3c', '<').replace('\\x3e', '>')
+
         response_str = response_str.replace('lhs:', '"lhs":')
         response_str = response_str.replace('rhs:', '"rhs":')
         response_str = response_str.replace('error:', '"error":')
         response_str = response_str.replace('icc:', '"icc":')
+
         converted = json.loads(response_str)
 
-        pattern = re.compile('([\d ]+\.\d+) ')
+        pattern = re.compile('^(?P<rate>[\d ]+\.\d+)\s(?:&#215; 10<sup>(?P<exponential>-?[\d]+)</sup> )?')
         if (converted['error'] == ''):
             m = pattern.match(converted['rhs'])
             if (m is not None):
-                rate = float(re.sub(r' ', '', m.group(0)))
+                rate = float(re.sub(r' ', '', m.group('rate')))
+                exponential = 1
+                if m.group('exponential') is not None:
+                    exponential = int(m.group('exponential'))
+                rate = rate * pow(10, exponential)
             else:
                 rate = NOT_SUPPORTED_RATE
         elif (converted['error'] == '4'):
