@@ -49,7 +49,7 @@ class CurrencyRates(webapp2.RequestHandler):
 
                 logging.debug('rate fetched, key is {0}'.format(cache_key))
 
-                if rate is not None and memcache.add(cache_key, rate, 1800):
+                if rate is not None and memcache.add(cache_key, rate, 600):
                     logging.debug('rate cached, key is {0}'.format(cache_key))
             else:
                 logging.debug('rate fetched form cache, key is {0}'.format(cache_key))
