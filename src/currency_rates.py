@@ -31,7 +31,7 @@ class GoogleCurrencyRateRequest():
             m = pattern.match(converted['rhs'])
             if (m is not None):
                 rate = float(re.sub(r' ', '', m.group('rate')))
-                exponential = 1
+                exponential = 0
                 if m.group('exponential') is not None:
                     exponential = int(m.group('exponential'))
                 rate = rate * pow(10, exponential)
