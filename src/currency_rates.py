@@ -79,10 +79,12 @@ class CurrencyRates(webapp2.RequestHandler):
                 result = {"from": from_currency, "to": to_currency, "rate": rate }
 
                 if (qty is not None and len(qty) > 0):
-                    qty = float(qty)
-                    converted_qty = qty * rate
-
-                    result["v"] = converted_qty 
+                    try:
+                        qty = float(qty)
+                        converted_qty = qty * rate
+                        result["v"] = converted_qty
+                    except:
+                        result["warning"] = "invalid quantity, ignored."
         else:
             result = {"err": "invalid request"}
 
