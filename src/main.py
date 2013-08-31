@@ -31,6 +31,16 @@ class Main(webapp2.RequestHandler):
         <p>We've reached the <a href="https://developers.google.com/appengine/docs/quotas#UrlFetch" target="_blank">GAE URL Fetch Quota</a> for the currency API.
         <br />And I need your help to enable billing to get larger quota. Do please help to click <a href="http://ko-fi.com?i=8d071856392d304" target="_blank">this link</a> and donate me $1.00USD.</p>
         <p class="author">--By Hippasus Chu</p>
+
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-43673035-1', 'rate-exchange.appspot.com');
+            ga('send', 'pageview');
+        </script>
     </body>
 </html>
         """
