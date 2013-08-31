@@ -6,6 +6,10 @@ threadsafe: true
 
 handlers:
 
+-   url: /google26b2c7c74e3d07e5.html
+    static_files: google26b2c7c74e3d07e5.html
+    upload: google26b2c7c74e3d07e5.html
+
 -   url: /robots.txt
     static_files: robots.txt
     upload: robots.txt
