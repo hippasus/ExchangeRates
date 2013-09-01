@@ -48,7 +48,12 @@ class CurrencyRates(webapp2.RequestHandler):
         request, response = self.request, self.response
 
         def get_request_params():
-            return (request.get('from'), request.get('to'), request.get('q'), request.get('callback'))
+            def strip(v):
+                if v is not None:
+                    v = v.strip()
+                return v
+
+            return (strip(request.get('from')), strip(request.get('to')), strip(request.get('q')), strip(request.get('callback')))
 
         def get_rate(from_currency, to_currency):
             cache_key = '{0}-{1}'.format(from_currency, to_currency)
