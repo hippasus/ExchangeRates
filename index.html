@@ -16,14 +16,14 @@
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
         <header class="inner">
-          <a id="forkme_banner" href="https://github.com/hyacinth/ExchangeRates">View on GitHub</a>
+          <a id="forkme_banner" href="https://github.com/hippasus/ExchangeRates">View on GitHub</a>
 
           <h1 id="project_title">ExchangeRates</h1>
           <h2 id="project_tagline">Exchange rate JSON/JSONP APIs</h2>
 
             <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/hyacinth/ExchangeRates/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/hyacinth/ExchangeRates/tarball/master">Download this project as a tar.gz file</a>
+              <a class="zip_download_link" href="https://github.com/hippasus/ExchangeRates/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/hippasus/ExchangeRates/tarball/master">Download this project as a tar.gz file</a>
             </section>
         </header>
     </div>
@@ -31,51 +31,66 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>Rate Exchange JSON/JSONP APIs</h1>
+        <h1>
+<a name="rate-exchange-jsonjsonp-apis" class="anchor" href="#rate-exchange-jsonjsonp-apis"><span class="octicon octicon-link"></span></a>Rate Exchange JSON/JSONP APIs</h1>
 
 <p>This is the rate exchange JSON/JSONP APIs project which is deployed at <a href="http://rate-exchange.appspot.com/">http://rate-exchange.appspot.com/</a>.</p>
 
-<p>Currently only currency rate exchange is supported.</p>
+<p>Currently only currency and temperature rate exchange are supported.</p>
 
-<h2>Usage</h2>
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<h3>Currency API</h3>
+<h3>
+<a name="currency-api" class="anchor" href="#currency-api"><span class="octicon octicon-link"></span></a>Currency API</h3>
 
 <p>By invoking the currency API, just send a request to <code>/currency</code> as follow:</p>
 
 <pre><code>/currency?from=USD&amp;to=EUR&amp;q=1&amp;callback=jsonpCallback
 </code></pre>
 
-<p>And note that the parameter <code>q</code> and <code>callback</code> is optional.</p>
+<p>And note that the parameter <code>q</code> and <code>callback</code> is optional.
+One more thing is that the rate fetched from google is cached by 10mins in this application.</p>
 
 <p>Here are some samples:</p>
 
 <table>
-<tr>
+<thead><tr>
 <th>Request</th>
-            <th>Response</th>
-        </tr>
+<th>Response</th>
+</tr></thead>
+<tbody>
 <tr>
 <td><code>/currency?from=USD&amp;to=EUR</code></td>
-<td><code>{"to": "EUR", "rate": 0.77966630299999995, "from": "USD"}</code></td>
+<td><code>{<br>    "to": "EUR",<br>    "rate": 0.77966630299999995,<br>    "from": "USD"<br>}</code></td>
 </tr>
 <tr>
 <td><code>/currency?from=USD&amp;to=EUR&amp;q=2</code></td>
-<td><code>{"to": "EUR", "rate": 0.77966630299999995, "from": "USD", "v": 1.5593326059999999}</code></td>
+<td><code>{<br>    "to": "EUR",<br>    "rate": 0.77966630299999995,<br>    "from": "USD",<br>    "v": 1.5593326059999999<br>}</code></td>
 </tr>
 <tr>
 <td><code>/currency?from=USD&amp;to=EUR&amp;callback=jsonpCallback</code></td>
-<td><code>jsonpCallback({"to": "EUR", "rate": 0.77966630299999995, "from": "USD"})</code></td>
+<td><code>jsonpCallback({<br>    "to": "EUR",<br>    "rate": 0.77966630299999995,<br>    "from": "USD"<br>})</code></td>
 </tr>
 <tr>
 <td><code>/currency?from=USD&amp;to=EUR&amp;q=2&amp;callback=jsonpCallback</code></td>
-<td><code>jsonpCallback({"to": "EUR", "rate": 0.77966630299999995, "from": "USD", "v": 1.5593326059999999})</code></td>
+<td><code>jsonpCallback({<br>    "to": "EUR",<br>    "rate": 0.77966630299999995,<br>    "from": "USD",<br>    "v": 1.5593326059999999<br>})</code></td>
 </tr>
 <tr>
 <td><code>/currency?from=USD</code></td>
-<td><code>{"err": "invalid request"}</code></td>
+<td><code>{<br>    "err": "invalid request"<br>}</code></td>
 </tr>
-</table><h3>Temperature API</h3>
+<tr>
+<td><code>/currency?from=USD&amp;to=LAK</code></td>
+<td><code>{<br>    "err": "not supported rate conversion."<br>}</code></td>
+</tr>
+<tr>
+<td><code>/currency?from=MXV&amp;to=USD</code></td>
+<td><code>{<br>    "err": "Parse error in query. - tokens = 1 MXV =? U.S. dollar"<br>}</code></td>
+</tr>
+</tbody>
+</table><h3>
+<a name="temperature-api" class="anchor" href="#temperature-api"><span class="octicon octicon-link"></span></a>Temperature API</h3>
 
 <p>By invoking the temperature API, send a request to <code>/temperature</code> as follows:</p>
 
@@ -86,13 +101,28 @@
 
 <pre><code>{"v": 98.6, "mode": "C2F", "qty": 37.0}
 </code></pre>
+
+<h2>
+<a name="help-needed" class="anchor" href="#help-needed"><span class="octicon octicon-link"></span></a>Help needed!</h2>
+
+<p>We've reached the <a href="https://developers.google.com/appengine/docs/quotas#UrlFetch">GAE URL Fetch Quota</a> for the currency API.
+And I need your help to enable billing to get larger quota. Do please help to click <a href="http://ko-fi.com?i=8d071856392d304">this link</a> and donate me $1.00USD.</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>ExchangeRates is released under the MIT license:</p>
+
+<ul>
+<li><a href="http://www.opensource.org/licenses/MIT">www.opensource.org/licenses/MIT</a></li>
+</ul>
       </section>
     </div>
 
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">ExchangeRates maintained by <a href="https://github.com/hyacinth">hyacinth</a></p>
+        <p class="copyright">ExchangeRates maintained by <a href="https://github.com/hippasus">hippasus</a></p>
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
