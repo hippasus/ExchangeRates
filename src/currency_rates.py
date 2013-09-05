@@ -17,6 +17,7 @@ class GoogleCurrencyRateRequest():
         # for normal rate, google returns r'{lhs: "1 U.S. dollar",rhs: "21 276.5957 Vietnamese dong",error: "",icc: true}'
         # for small rate, google returns r'{lhs: "1 Vietnamese dong",rhs: "4.7 \x26#215; 10\x3csup\x3e-5\x3c/sup\x3e U.S. dollars",error: "",icc: true}'
         response_str = urllib2.urlopen(url).read().decode(u'utf-8', u'ignore')
+        response_str = response_str.replace(r'\x22', r'\\"') # fix issue 9
         response_str = response_str.decode(u'string-escape') # decode to r'{lhs: "1 Vietnamese dong",rhs: "4.7 &#215; 10<sup>-5</sup> U.S. dollars",error: "",icc: true}'
 
         response_str = response_str.replace(u'lhs:', u'"lhs":')
