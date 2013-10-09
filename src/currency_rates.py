@@ -3,7 +3,7 @@
 
 import json, re, urllib2, utils, logging
 import webapp2
-from google.appengine.api import memcache
+from google.appengine.api import memcache, urlfetch
 
 NOT_SUPPORTED_RATE = -1
 
@@ -11,12 +11,15 @@ class GoogleCurrencyRateRequest():
     def get_rate(self, from_currency, to_currency):
         rate = None
         url = u'https://www.google.com/ig/calculator?hl=en&q={0}{1}=?{2}'.format(1, from_currency, to_currency)
-        opener = urllib2.build_opener()
-        urllib2.install_opener(opener)
+        result = urlfetch.fetch(url, deadline=60)
+
+        if result.status_code != 200:
+            logging.debug(u'failed to fetch rate info from google, the url is "{0}", the response is {1} {2}.'.format(url, result.status_code, result.content.decode(u'utf-8', u'ignore')))
+            return (rate, u'failed to fetch rate info from google, {0} returned.'.format(result.status_code))
 
         # for normal rate, google returns r'{lhs: "1 U.S. dollar",rhs: "21 276.5957 Vietnamese dong",error: "",icc: true}'
         # for small rate, google returns r'{lhs: "1 Vietnamese dong",rhs: "4.7 \x26#215; 10\x3csup\x3e-5\x3c/sup\x3e U.S. dollars",error: "",icc: true}'
-        response_str = urllib2.urlopen(url).read().decode(u'utf-8', u'ignore')
+        response_str = result.content.decode(u'utf-8', u'ignore')
         response_str = response_str.decode(u'string-escape') # decode to r'{lhs: "1 Vietnamese dong",rhs: "4.7 &#215; 10<sup>-5</sup> U.S. dollars",error: "",icc: true}'
 
         response_str = response_str.replace(u'lhs:', u'"lhs":')
