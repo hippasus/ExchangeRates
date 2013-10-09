@@ -10,7 +10,7 @@ NOT_SUPPORTED_RATE = -1
 class GoogleCurrencyRateRequest():
     def get_rate(self, from_currency, to_currency):
         rate = None
-        url = u'https://www.google.com/ig/calculator?hl=en&q={0}{1}=?{2}'.format(1, from_currency, to_currency)
+        url = u'https://www.google.com/ig/calculator?hl=en&q={0}{1}=?{2}'.format(1, urllib2.quote(from_currency), urllib2.quote(to_currency))
         result = urlfetch.fetch(url, deadline=60)
 
         if result.status_code != 200:
