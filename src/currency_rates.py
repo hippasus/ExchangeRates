@@ -47,6 +47,27 @@ class GoogleCurrencyRateRequest():
 
         return (rate, err)
 
+class XeCurrencyRateRequest():
+    def get_rate(self, from_currency, to_currency):
+        rate, err = None, None
+        url = u'http://www.xe.com/currencyconverter/convert/?Amount={0}&From={1}&To={2}'.format(1, urllib2.quote(from_currency), urllib2.quote(to_currency))
+        result = urlfetch.fetch(url, deadline=60)
+
+        if result.status_code != 200:
+            logging.info(u'failed to fetch rate info from xe.com, the url is "{0}", the response is {1} {2}.'.format(url, result.status_code, result.content.decode(u'utf-8', u'ignore')))
+            return (rate, u'failed to fetch rate info from xe.com, {0} returned.'.format(result.status_code))
+
+        response_str = result.content.decode(u'utf-8', u'ignore')
+
+        m = re.search(u'.*>1.*{0}.*&nbsp;(?P<rate>[\d,]+\.\d+)&nbsp;{1}.*</td>'.format(from_currency, to_currency), response_str)
+        if m:
+            #logging.info(m.group(0))
+            rate = float(m.group(u'rate').replace(u',', u''))
+        else:
+            err = 'failed to parse response from xe.com.'
+
+        return (rate, err)
+
 class CurrencyRates(webapp2.RequestHandler):
     def get(self):
         request, response = self.request, self.response
@@ -60,10 +81,11 @@ class CurrencyRates(webapp2.RequestHandler):
             return (strip(request.get(u'from')), strip(request.get(u'to')), strip(request.get(u'q')), strip(request.get(u'callback')))
 
         def get_rate(from_currency, to_currency):
+            from_currency, to_currency = from_currency.upper(), to_currency.upper()
             cache_key = u'{0}-{1}'.format(from_currency, to_currency)
             rate, err = memcache.get(cache_key), None
             if rate is None:
-                req = GoogleCurrencyRateRequest()
+                req = XeCurrencyRateRequest()
                 rate, err = req.get_rate(from_currency, to_currency)
 
                 logging.debug(u'rate fetched, key is {0}'.format(cache_key))
