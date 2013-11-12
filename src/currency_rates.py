@@ -50,7 +50,7 @@ class GoogleCurrencyRateRequest():
 class XeCurrencyRateRequest():
     def get_rate(self, from_currency, to_currency):
         rate, err = None, None
-        url = u'http://www.xe.com/currencyconverter/convert/?Amount={0}&From={1}&To={2}'.format(1, urllib2.quote(from_currency), urllib2.quote(to_currency))
+        url = u'http://www.xe.com/currencyconverter/convert/?template=mobile&Amount={0}&From={1}&To={2}'.format(1, urllib2.quote(from_currency), urllib2.quote(to_currency))
         result = urlfetch.fetch(url, deadline=60)
 
         if result.status_code != 200:
@@ -90,7 +90,7 @@ class CurrencyRates(webapp2.RequestHandler):
 
                 logging.debug(u'rate fetched, key is {0}'.format(cache_key))
 
-                if rate is not None and memcache.add(cache_key, rate, 600):
+                if rate is not None and memcache.add(cache_key, rate, 1200):
                     logging.debug(u'rate cached, key is {0}'.format(cache_key))
             else:
                 logging.debug(u'rate fetched form cache, key is {0}'.format(cache_key))
