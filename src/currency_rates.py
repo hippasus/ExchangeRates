@@ -50,7 +50,7 @@ class GoogleCurrencyRateRequest():
 class XeCurrencyRateRequest():
     def get_rate(self, from_currency, to_currency):
         rate, err = None, None
-        url = u'http://www.xe.com/currencyconverter/convert/?template=mobile&Amount={0}&From={1}&To={2}'.format(1, urllib2.quote(from_currency), urllib2.quote(to_currency))
+        url = u'http://www.xe.com/ucc/convert.cgi?template=mobile&Amount={0}&From={1}&To={2}'.format(1, urllib2.quote(from_currency), urllib2.quote(to_currency))
         result = urlfetch.fetch(url, deadline=60)
 
         if result.status_code != 200:
@@ -58,8 +58,9 @@ class XeCurrencyRateRequest():
             return (rate, u'failed to fetch rate info from xe.com, {0} returned.'.format(result.status_code))
 
         response_str = result.content.decode(u'utf-8', u'ignore')
+        logging.info(response_str)
 
-        m = re.search(u'.*>1.*{0}.*&nbsp;(?P<rate>[\d,]+\.\d+)&nbsp;{1}.*</td>'.format(from_currency, to_currency), response_str)
+        m = re.search(u'.*>1\s{0}\s=\s(?P<rate>[\d,]+\.\d+)\s{1}.*</td>'.format(from_currency, to_currency), response_str)
         if m:
             #logging.info(m.group(0))
             rate = float(m.group(u'rate').replace(u',', u''))
