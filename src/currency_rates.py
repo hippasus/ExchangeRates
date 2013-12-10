@@ -58,7 +58,7 @@ class XeCurrencyRateRequest():
             return (rate, u'failed to fetch rate info from xe.com, {0} returned.'.format(result.status_code))
 
         response_str = result.content.decode(u'utf-8', u'ignore')
-        logging.info(response_str)
+        #logging.info(response_str)
 
         m = re.search(u'.*>1\s{0}\s=\s(?P<rate>[\d,]+\.\d+)\s{1}.*</td>'.format(from_currency, to_currency), response_str)
         if m:
@@ -89,12 +89,14 @@ class CurrencyRates(webapp2.RequestHandler):
                 req = XeCurrencyRateRequest()
                 rate, err = req.get_rate(from_currency, to_currency)
 
-                logging.debug(u'rate fetched, key is {0}'.format(cache_key))
+                #logging.debug(u'rate fetched, key is {0}'.format(cache_key))
 
                 if rate is not None and memcache.add(cache_key, rate, 1200):
-                    logging.debug(u'rate cached, key is {0}'.format(cache_key))
+                    pass
+                    #logging.debug(u'rate cached, key is {0}'.format(cache_key))
             else:
-                logging.debug(u'rate fetched form cache, key is {0}'.format(cache_key))
+                pass
+                #logging.debug(u'rate fetched form cache, key is {0}'.format(cache_key))
 
             return rate, err
 
