@@ -4,7 +4,6 @@
 import json, re, urllib2, utils, logging
 import webapp2
 from google.appengine.api import memcache, urlfetch
-from decimal import Decimal, InvalidOperation
 
 NOT_SUPPORTED_RATE = -1
 
@@ -36,7 +35,7 @@ class GoogleCurrencyRateRequest():
         if (err == ''):
             m = pattern.match(converted[u'rhs'])
             if (m is not None):
-                rate = Decimal(re.sub(r' ', '', m.group(u'rate')))
+                rate = float(re.sub(r' ', '', m.group(u'rate')))
                 exponential = 0
                 if m.group(u'exponential') is not None:
                     exponential = int(m.group(u'exponential'))
@@ -64,7 +63,7 @@ class XeCurrencyRateRequest():
         m = re.search(u'.*>1\s{0}\s=\s(?P<rate>[\d,]+\.\d+)\s{1}.*</td>'.format(from_currency, to_currency), response_str)
         if m:
             #logging.info(m.group(0))
-            rate = Decimal(m.group(u'rate').replace(u',', u''))
+            rate = float(m.group(u'rate').replace(u',', u''))
         else:
             err = 'failed to parse response from xe.com.'
 
@@ -115,10 +114,10 @@ class CurrencyRates(webapp2.RequestHandler):
 
                 if (qty is not None and len(qty) > 0):
                     try:
-                        qty = Decimal(qty)
+                        qty = float(qty)
                         converted_qty = qty * rate
                         result[u'v'] = converted_qty
-                    except InvalidOperation:
+                    except:
                         result[u'warning'] = u'invalid quantity, ignored.'
         else:
             result = {u'err': u'invalid request'}
