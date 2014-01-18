@@ -111,13 +111,13 @@ class CurrencyRates(webapp2.RequestHandler):
             elif rate == NOT_SUPPORTED_RATE:
                 result = {u'err': u'not supported rate conversion.'}
             else:
-                result = {u'from': from_currency, u'to': to_currency, u'rate': str(rate) }
+                result = {u'from': from_currency, u'to': to_currency, u'rate': rate }
 
                 if (qty is not None and len(qty) > 0):
                     try:
                         qty = Decimal(qty)
                         converted_qty = qty * rate
-                        result[u'v'] = str(converted_qty)
+                        result[u'v'] = converted_qty
                     except InvalidOperation:
                         result[u'warning'] = u'invalid quantity, ignored.'
         else:
